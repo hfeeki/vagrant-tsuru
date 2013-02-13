@@ -34,15 +34,27 @@ user_account 'git' do
   password  'vagrant'
 end
 
-directory node[:git][:repos_dir] do
+directory node[:tsuru][:repos_dir] do
   owner "git"
   mode "0755"
   action :create
 end
 
-directory node[:git][:tsuru_dir] do
+directory node[:tsuru][:tsuru_dir] do
   owner "git"
   mode "0755"
+  action :create
+end
+
+template "/etc/tsuru.conf" do
+  source "tsuru.conf.erb"
+  owner "git"
+  group "git"
+  variables({
+    :tsuru_db_url   => node[:tsuru][:db_url],
+    :tsuru_db_name  => node[:tsuru][:tsuru_db_name],
+    :git_port       => node[:tsuru][:git_port]
+  })
   action :create
 end
 

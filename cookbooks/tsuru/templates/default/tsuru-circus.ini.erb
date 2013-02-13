@@ -1,0 +1,51 @@
+[circus]
+check_delay = 5
+debug = True
+endpoint = tcp://127.0.0.1:5555
+httpd = True
+httpd_host = 0.0.0.0
+httpd_port = <%= @circus_web_port %>
+
+[watcher:tsuru-web]
+cmd = <%= @tsuru_dir %>/dist/api
+copy_env = True
+uid = <%= @username %>
+
+[watcher:collector]
+cmd = <%= @tsuru_dir %>/dist/collector
+copy_env = True
+uid = <%= @username %>
+
+[watcher:beanstalkd]
+cmd = /usr/local/bin/beanstalkd
+copy_env = True
+uid = <%= @username %>
+
+[watcher:gandalf-web]
+cmd = <%= @gandalf_dir %>/dist/gandalf-webserver
+uid = <%= @username %>
+copy_env = True
+stderr_stream.class = FileStream
+stderr_stream.filename = <%= @gandalf_dir %>/gandalf-err.log
+stderr_stream.refresh_time = 0.3
+stdout_stream.class = FileStream
+stdout_stream.filename = <%= @gandalf_dir %>/gandalf-out.log
+stdout_stream.refresh_time = 0.3
+
+[watcher:git-daemon]
+cmd = <%= @username %>
+args = daemon --base-path=<%= @repos_dir %> --syslog --export-all
+copy_env = True
+uid = <%= @username %>
+
+[env:gandalf-web]
+GOMAXPROCS = 8
+
+[env:tsuru-web]
+GOMAXPROCS = 8
+GORACE = log_path=<%= @tsuru_dir %>/webserver.race.log
+
+[env:collector]
+GOMAXPROCS = 8
+GORACE = log_path=<%= @tsuru_dir %>/collector.race.log
+

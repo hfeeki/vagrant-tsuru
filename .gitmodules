@@ -1,0 +1,6 @@
+[submodule "cookbooks/user"]
+	path = cookbooks/user
+	url = https://github.com/fnichol/chef-user.git
+[submodule "baseboxes"]
+	path = baseboxes
+	url = https://github.com/hfeeki/vagrant-basebox-templates.git

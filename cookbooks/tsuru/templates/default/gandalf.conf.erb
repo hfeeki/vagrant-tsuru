@@ -4,7 +4,7 @@ database:
     name: <%= node[:tsuru][:gandalf_db_name] %>
 git:
     bare:
-        location: <%= node[:tsuru]][:repos_dir] %> # you'll need to create this dir and chown it to your user, if you change it, remember changing in setup/install.sh script
+        location: <%= node[:tsuru][:repos_dir] %> # you'll need to create this dir and chown it to your user, if you change it, remember changing in setup/install.sh script
         template: /home/git/bare-template # this configuration is optional, if you don't have any custom stuff in your bare, just comment it
 host: <%= node[:tsuru][:gandalf_host] %>
 webserver:

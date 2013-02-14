@@ -1,4 +1,5 @@
 default[:tsuru][:username] = "git"
+default[:tsuru][:git_home_dir] = "/home/git"
 default[:tsuru][:repos_dir] = "/home/git/repositories"
 default[:tsuru][:tsuru_dir] = "/home/git/tsuru"
 

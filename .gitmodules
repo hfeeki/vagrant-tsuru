@@ -4,3 +4,6 @@
 [submodule "baseboxes"]
 	path = baseboxes
 	url = https://github.com/hfeeki/vagrant-basebox-templates.git
+[submodule "cookbooks/build-essential"]
+	path = cookbooks/build-essential
+	url = https://github.com/opscode-cookbooks/build-essential.git

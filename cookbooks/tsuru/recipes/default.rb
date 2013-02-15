@@ -5,9 +5,9 @@
 #end
 
 # update apt-get list
-#execute "initial-sudo-apt-get-update" do
-#  command "apt-get update"
-#end
+execute "initial-sudo-apt-get-update" do
+  command "apt-get update"
+end
 
 # Our version of .bashrc has /home/vagrant/bin in PATH
 #cookbook_file "/home/vagrant/.bashrc" do
@@ -18,6 +18,12 @@
 #  action :create
 #end
 
+#include_recipe "build-essential"
+
+package "python-dev" do
+  action :install
+end
+
 package "beanstalkd" do
   action :install
 end
@@ -26,6 +32,10 @@ package "python-pip" do
   action :install
 end
 
+execute "install_circus" do
+  command "/usr/bin/pip install circus"
+  action :run
+end
 
 # Install git
 #include_recipe "git"
@@ -34,19 +44,19 @@ end
 #include_recipe "bazaar"
 
 # Create a user: git
-user node[:tsuru][:username] do
-  comment   "git user"
-  home      node[:tsuru][:git_home_dir]
-  shell     "/bin/bash"
-  #password  "vagrant"
-  manage_home true  
-end
-
-#user_account node[:tsuru][:username] do
-#  comment   'git user'
+#user node[:tsuru][:username] do
+#  comment   "git user"
 #  home      node[:tsuru][:git_home_dir]
 #  shell     "/bin/bash"
+#  #password  "vagrant"
+#  manage_home true  
 #end
+
+user_account node[:tsuru][:username] do
+  comment   'git user'
+  home      node[:tsuru][:git_home_dir]
+  shell     "/bin/bash"
+end
 
 directory node[:tsuru][:repos_dir] do
   owner node[:tsuru][:username]
@@ -71,14 +81,14 @@ template "/etc/tsuru/tsuru.conf" do
   source "tsuru.conf.erb"
   owner node[:tsuru][:username]
   group node[:tsuru][:username]  
-  action :create
+  action :create_if_missing
 end
 
 template "/etc/gandalf.conf" do
   source "gandalf.conf.erb"
   owner node[:tsuru][:username]
   group node[:tsuru][:username]
-  action :create
+  action :create_if_missing
 end
 
 # Download tsuru, gandalf code and build it
@@ -102,21 +112,15 @@ execute "get_tsuru_code" do
                 'GOOS' => 'linux'})
 end
 
-execute "build_gandalf" do
-  command ""
-  action :run
-end
+#execute "build_gandalf" do
+#  command ""
+#  action :run
+#end
 
-execute "build_tsuru" do
-  command ""
-  action :run
-end
-
-execute "install_circus" do
-  command "/usr/local/bin/pip install circus"
-  action :run
-end
-
+#execute "build_tsuru" do
+#  command ""
+#  action :run
+#end
 
 service "mongodb" do
   action [ :enable, :start ]

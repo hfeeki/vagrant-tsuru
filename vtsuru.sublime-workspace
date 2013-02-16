@@ -7,6 +7,22 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "Vagrantfile",
+			"settings":
+			{
+				"buffer_size": 4006,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "cookbooks/tsuru/recipes/default.rb",
+			"settings":
+			{
+				"buffer_size": 2790,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -322,8 +338,65 @@
 	"groups":
 	[
 		{
+			"selected": 1,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "Vagrantfile",
+					"settings":
+					{
+						"buffer_size": 4006,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3807,
+								3807
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1887.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "cookbooks/tsuru/recipes/default.rb",
+					"settings":
+					{
+						"buffer_size": 2790,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2604,
+								2604
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1989.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
 			]
 		}
 	],

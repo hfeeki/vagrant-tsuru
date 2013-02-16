@@ -95,7 +95,7 @@ end
 execute "get_gandalf_code" do 
   user  "vagrant"
   group "vagrant"
-  command "/home/vagrant/go/bin/go get github.com/globocom/gandalf/..."
+  command "/home/vagrant/go/bin/go get -u github.com/globocom/gandalf/..."
   environment ({'GOROOT' => '/home/vagrant/go', 
                 'GOPATH' => '/home/vagrant/.go', 
                 'GOARCH' => 'amd64', 
@@ -105,22 +105,46 @@ end
 execute "get_tsuru_code" do
   user  "vagrant"
   group "vagrant"
-  command "/home/vagrant/go/bin/go get github.com/globocom/tsuru/..."
+  command "/home/vagrant/go/bin/go get -u github.com/globocom/tsuru/..."
   environment ({'GOROOT' => '/home/vagrant/go', 
                 'GOPATH' => '/home/vagrant/.go', 
                 'GOARCH' => 'amd64', 
                 'GOOS' => 'linux'})
 end
 
-#execute "build_gandalf" do
-#  command ""
-#  action :run
-#end
+bash "build-gandalf" do
+  user "git"
+  group "git"
+  environment ({'GOROOT' => '/home/vagrant/go', 
+                'GOPATH' => '/home/vagrant/.go', 
+                'GOARCH' => 'amd64', 
+                'GOOS' => 'linux'})
+  cwd "/home/git"  
+  code <<-EOH    
+    mkdir -p dist
+    rm dist/collector
+    rm dist/webserver
+    /home/vagrant/go/bin/go clean github.com/globocom/gandalf/...
+    /home/vagrant/go/bin/go build -a -o dist/gandalf-webserver github.com/globocom/gandalf/webserver
+    /home/vagrant/go/bin/go build -a -o dist/gandalf github.com/globocom/gandalf/bin    
+  EOH
+end
 
-#execute "build_tsuru" do
-#  command ""
-#  action :run
-#end
+bash "build-tsuru" do
+  user "git"
+  group "git"
+  environment ({'GOROOT' => '/home/vagrant/go', 
+                'GOPATH' => '/home/vagrant/.go', 
+                'GOARCH' => 'amd64', 
+                'GOOS' => 'linux'})
+  cwd "/home/git"  
+  code <<-EOH
+    mkdir -p dist
+    /home/vagrant/go/bin/go clean github.com/globocom/tsuru/...
+    /home/vagrant/go/bin/go build -a -o dist/collector github.com/globocom/tsuru/collector
+    /home/vagrant/go/bin/go build -a -o dist/webserver github.com/globocom/tsuru/api    
+  EOH
+end
 
 service "mongodb" do
   action [ :enable, :start ]

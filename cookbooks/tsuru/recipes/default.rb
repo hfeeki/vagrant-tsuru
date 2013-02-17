@@ -5,7 +5,7 @@
 #end
 
 # update apt-get list
-execute "initial-sudo-apt-get-update" do
+execute "initial-apt-get-update" do
   command "apt-get update"
 end
 
@@ -23,7 +23,7 @@ end
 package "python-dev" do
   action :install
 end
-
+# needed by tsuru
 package "beanstalkd" do
   action :install
 end
@@ -32,8 +32,18 @@ package "python-pip" do
   action :install
 end
 
+# circusweb need event.h 
+package "libevent-dev" do
+  action :install
+end
+
 execute "install_circus" do
   command "/usr/bin/pip install circus"
+  action :run
+end
+
+execute "install_circusweb" do
+  command "/usr/bin/pip install -r /usr/local/lib/python2.7/dist-packages/circus/web/web-requirements.txt"
   action :run
 end
 
@@ -70,6 +80,13 @@ directory "/etc/tsuru" do
   action :create
 end
 
+directory "/etc/circus" do
+  owner "root"
+  group "root"
+  mode 00755
+  action :create
+end
+
 directory node[:tsuru][:tsuru_dir] do
   owner node[:tsuru][:username]
   group node[:tsuru][:username]
@@ -81,14 +98,22 @@ template "/etc/tsuru/tsuru.conf" do
   source "tsuru.conf.erb"
   owner node[:tsuru][:username]
   group node[:tsuru][:username]  
-  action :create_if_missing
+  action :create
 end
 
 template "/etc/gandalf.conf" do
   source "gandalf.conf.erb"
   owner node[:tsuru][:username]
   group node[:tsuru][:username]
-  action :create_if_missing
+  action :create
+end
+
+template "/etc/circus/tsuru-circus.ini" do
+  source "tsuru-circus.ini.erb"
+  owner "git"
+  group "git"
+  mode 00644
+  action :create
 end
 
 # Download tsuru, gandalf code and build it
@@ -153,4 +178,14 @@ end
 service "beanstalkd" do
   action [ :enable, :start ]
 end
+
+execute "start-circus-process-monitor" do
+  user "git"
+  group "git"
+  cwd "/home/git"
+  command "/usr/local/bin/circusd --log-level debug --log-output circusd.log --pidfile circusd.pid --daemon /etc/circus/tsuru-circus.ini"
+  action :run
+end
+
+
 

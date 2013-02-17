@@ -4,48 +4,48 @@ debug = True
 endpoint = tcp://127.0.0.1:5555
 httpd = True
 httpd_host = 0.0.0.0
-httpd_port = <%= @circus_web_port %>
+httpd_port = <%= node[:tsuru][:circus_web_port] %>
 
 [watcher:tsuru-web]
-cmd = <%= @tsuru_dir %>/dist/api
+cmd = <%= node[:tsuru][:git_home_dir] %>/dist/api
 copy_env = True
-uid = <%= @username %>
+uid = <%= node[:tsuru][:username] %>
 
 [watcher:collector]
-cmd = <%= @tsuru_dir %>/dist/collector
+cmd = <%= node[:tsuru][:git_home_dir] %>/dist/collector
 copy_env = True
-uid = <%= @username %>
+uid = <%= node[:tsuru][:username] %>
 
 [watcher:beanstalkd]
 cmd = /usr/local/bin/beanstalkd
 copy_env = True
-uid = <%= @username %>
+uid = <%= node[:tsuru][:username] %>
 
 [watcher:gandalf-web]
-cmd = <%= @gandalf_dir %>/dist/gandalf-webserver
-uid = <%= @username %>
+cmd = <%= node[:tsuru][:git_home_dir] %>/dist/gandalf-webserver
+uid = <%= node[:tsuru][:username] %>
 copy_env = True
 stderr_stream.class = FileStream
-stderr_stream.filename = <%= @gandalf_dir %>/gandalf-err.log
+stderr_stream.filename = <%= node[:tsuru][:git_home_dir] %>/gandalf-err.log
 stderr_stream.refresh_time = 0.3
 stdout_stream.class = FileStream
-stdout_stream.filename = <%= @gandalf_dir %>/gandalf-out.log
+stdout_stream.filename = <%= node[:tsuru][:git_home_dir] %>/gandalf-out.log
 stdout_stream.refresh_time = 0.3
 
 [watcher:git-daemon]
-cmd = <%= @username %>
-args = daemon --base-path=<%= @repos_dir %> --syslog --export-all
+cmd = <%= node[:tsuru][:username] %>
+args = daemon --base-path=<%= node[:tsuru][:repos_dir] %> --syslog --export-all
 copy_env = True
-uid = <%= @username %>
+uid = <%= node[:tsuru][:username] %>
 
 [env:gandalf-web]
 GOMAXPROCS = 8
 
 [env:tsuru-web]
 GOMAXPROCS = 8
-GORACE = log_path=<%= @tsuru_dir %>/webserver.race.log
+GORACE = log_path=<%= node[:tsuru][:git_home_dir] %>/webserver.race.log
 
 [env:collector]
 GOMAXPROCS = 8
-GORACE = log_path=<%= @tsuru_dir %>/collector.race.log
+GORACE = log_path=<%= node[:tsuru][:git_home_dir] %>/collector.race.log
 

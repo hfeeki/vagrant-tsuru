@@ -5,9 +5,9 @@
 #end
 
 # update apt-get list
-execute "initial-apt-get-update" do
-  command "apt-get update"
-end
+#execute "initial-apt-get-update" do
+#  command "apt-get update"
+#end
 
 # Our version of .bashrc has /home/vagrant/bin in PATH
 #cookbook_file "/home/vagrant/.bashrc" do
@@ -19,6 +19,7 @@ end
 #end
 
 #include_recipe "build-essential"
+include_recipe "python"
 
 package "python-dev" do
   action :install
@@ -28,30 +29,38 @@ package "beanstalkd" do
   action :install
 end
 
-package "python-pip" do
-  action :install
-end
+#package "python-pip" do
+#  action :install
+#end
+
+# install virtualenv
+#execute "install_virtualenv" do
+#  command "/usr/bin/pip install virtualenv"
+#  action :run
+#end
 
 # circusweb need event.h 
 package "libevent-dev" do
   action :install
 end
 
-execute "install_circus" do
-  command "/usr/bin/pip install circus"
-  action :run
-end
+#execute "install_circus" do
+#  command "/usr/bin/pip install circus"
+#  action :run
+#end
+python_pip "circus"
+
+#execute "install_tsuru-circus" do
+#  command "/usr/bin/pip install tsuru-circus"
+#  action :run
+#end
+python_pip "tsuru-circus"
 
 execute "install_circusweb" do
   command "/usr/bin/pip install -r /usr/local/lib/python2.7/dist-packages/circus/web/web-requirements.txt"
   action :run
 end
 
-# Install git
-#include_recipe "git"
-
-# Install bazaar
-#include_recipe "bazaar"
 
 # Create a user: git
 #user node[:tsuru][:username] do
@@ -120,7 +129,7 @@ end
 execute "get_gandalf_code" do 
   user  "vagrant"
   group "vagrant"
-  command "/home/vagrant/go/bin/go get -u github.com/globocom/gandalf/..."
+  command "/home/vagrant/go/bin/go get github.com/globocom/gandalf/..."
   environment ({'GOROOT' => '/home/vagrant/go', 
                 'GOPATH' => '/home/vagrant/.go', 
                 'GOARCH' => 'amd64', 
@@ -130,11 +139,69 @@ end
 execute "get_tsuru_code" do
   user  "vagrant"
   group "vagrant"
-  command "/home/vagrant/go/bin/go get -u github.com/globocom/tsuru/..."
+  command "/home/vagrant/go/bin/go get github.com/globocom/tsuru/..."
   environment ({'GOROOT' => '/home/vagrant/go', 
                 'GOPATH' => '/home/vagrant/.go', 
                 'GOARCH' => 'amd64', 
                 'GOOS' => 'linux'})
+end
+
+# get abyss code
+execute "get-abyss-code" do
+  user "vagrant"
+  group "vagrant"
+  cwd "/home/vagrant"
+  command "/usr/bin/git clone https://github.com/globocom/abyss.git"
+  creates "/home/vagrant/abyss"
+  action :run
+end
+
+# create a virtualenv for abyss
+#execute "create-abyss-venv" do
+#  user  "vagrant"
+#  group "vagrant"
+#  cwd "/home/vagrant/abyss"
+#  command "/usr/local/bin/virtualenv .venv"
+#  creates "/home/vagrant/abyss/.venv"
+#  action :run
+#end
+
+python_virtualenv "/home/vagrant/abyss/.venv" do
+  owner "vagrant"
+  group "vagrant"
+  action :create
+end
+
+#bash "install-abyss-dependices" do
+#  user  "vagrant"
+#  group "vagrant"
+#  cwd "/home/vagrant/abyss"
+#  code <<-EOH
+#    source .venv/bin/activate && /usr/bin/pip install -r ./test-requirements.txt
+#  EOH
+#end
+python_pip "django" do
+  virtualenv "/home/vagrant/abyss/.venv"
+  version "1.4.1"
+  action :install
+end
+
+python_pip "requests" do
+  virtualenv "/home/vagrant/abyss/.venv"
+  version "0.13.3"
+  action :install
+end
+
+python_pip "gunicorn" do
+  virtualenv "/home/vagrant/abyss/.venv"
+  version "0.14.3"
+  action :install
+end
+
+python_pip "mock" do
+  virtualenv "/home/vagrant/abyss/.venv"
+  version "1.0"
+  action :install
 end
 
 bash "build-gandalf" do
@@ -168,6 +235,8 @@ bash "build-tsuru" do
     /home/vagrant/go/bin/go clean github.com/globocom/tsuru/...
     /home/vagrant/go/bin/go build -a -o dist/collector github.com/globocom/tsuru/collector
     /home/vagrant/go/bin/go build -a -o dist/webserver github.com/globocom/tsuru/api    
+    /home/vagrant/go/bin/go build -a -o dist/tsuru github.com/globocom/tsuru/cmd/tsuru/developer
+    /home/vagrant/go/bin/go build -a -o dist/crane github.com/globocom/tsuru/cmd/crane
   EOH
 end
 

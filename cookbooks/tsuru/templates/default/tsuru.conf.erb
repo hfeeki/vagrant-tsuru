@@ -6,8 +6,8 @@ database:
   url: <%= node[:tsuru][:db_url] %>
   name: <%= node[:tsuru][:tsuru_db_name] %>
 git:
-  unit-repo: /home/application/current
-  host: gandalf.plataformas.glb.com
+  unit-repo: /home/git/repositories
+  host: 127.0.0.1
   protocol: http
   port: <%= node[:tsuru][:git_port] %>
 bucket-support: true
@@ -36,4 +36,8 @@ juju:
     - us-west-1a
 queue-server: "127.0.0.1:11300"
 admin-team: admin
-
+smtp: 
+  host: smtp.example.com
+  port: 25
+  user: admin@example.com
+  password: 123456

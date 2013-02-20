@@ -7,7 +7,7 @@ httpd_host = 0.0.0.0
 httpd_port = <%= node[:tsuru][:circus_web_port] %>
 
 [watcher:tsuru-web]
-cmd = <%= node[:tsuru][:git_home_dir] %>/dist/api
+cmd = <%= node[:tsuru][:git_home_dir] %>/dist/webserver
 copy_env = True
 uid = <%= node[:tsuru][:username] %>
 
@@ -17,7 +17,7 @@ copy_env = True
 uid = <%= node[:tsuru][:username] %>
 
 [watcher:beanstalkd]
-cmd = /usr/local/bin/beanstalkd
+cmd = /usr/bin/beanstalkd
 copy_env = True
 uid = <%= node[:tsuru][:username] %>
 

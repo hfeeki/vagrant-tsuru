@@ -69,6 +69,7 @@ Vagrant::Config.run do |config|
      chef.roles_path = "roles"
      chef.data_bags_path = "data_bags"
      chef.add_recipe "user"
+     chef.add_recipe "python"
      chef.add_recipe "tsuru"
   #   chef.add_role "web"
   

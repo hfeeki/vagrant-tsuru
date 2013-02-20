@@ -9,4 +9,4 @@
 	url = https://github.com/opscode-cookbooks/build-essential.git
 [submodule "cookbooks/python"]
 	path = cookbooks/python
-	url = https://github.com/opscode-cookbooks/python.git
+	url = https://github.com/hfeeki/cook-python.git

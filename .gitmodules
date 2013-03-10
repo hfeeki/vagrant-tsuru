@@ -7,3 +7,6 @@
 [submodule "cookbooks/build-essential"]
 	path = cookbooks/build-essential
 	url = https://github.com/opscode-cookbooks/build-essential.git
+[submodule "cookbooks/python2"]
+	path = cookbooks/python2
+	url = https://github.com/hfeeki/cook-python.git

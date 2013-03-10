@@ -77,6 +77,12 @@ user_account node[:tsuru][:username] do
   shell     "/bin/bash"
 end
 
+user_account 'ubuntu' do
+  comment   'ubuntu user'
+  home      '/home/ubuntu'
+  shell     "/bin/bash"
+end
+
 directory node[:tsuru][:repos_dir] do
   owner node[:tsuru][:username]
   group node[:tsuru][:username]
@@ -156,6 +162,15 @@ execute "get-abyss-code" do
   action :run
 end
 
+execute "get-new-abyss-code" do  
+  user "vagrant"
+  group "vagrant"
+  cwd "/home/vagrant/abyss"
+  command "git pull"
+  action :run
+end
+
+
 # create a virtualenv for abyss
 #execute "create-abyss-venv" do
 #  user  "vagrant"
@@ -182,25 +197,25 @@ end
 #end
 python_pip "django" do
   virtualenv "/home/vagrant/abyss/.venv"
-  version "1.4.1"
+  version "1.5"
   action :install
 end
 
 python_pip "requests" do
   virtualenv "/home/vagrant/abyss/.venv"
-  version "0.13.3"
+  version "1.1.0"
   action :install
 end
 
 python_pip "gunicorn" do
   virtualenv "/home/vagrant/abyss/.venv"
-  version "0.14.3"
+  version "0.17.2"
   action :install
 end
 
 python_pip "mock" do
   virtualenv "/home/vagrant/abyss/.venv"
-  version "1.0"
+  version "1.0.1"
   action :install
 end
 

@@ -1,4 +1,4 @@
-listen: "0.0.0.0:8080"
+listen: <%= node[:tsuru][:webserver] %>
 use-tls: <%= node[:tsuru][:use_tls] %>
 #tls-cert-file: /path/to/cert.pem
 #tls-key-file: /path/to/key.pem

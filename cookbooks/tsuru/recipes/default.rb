@@ -170,6 +170,15 @@ execute "get-new-abyss-code" do
   action :run
 end
 
+execute "generate tls key file" do
+  command "/usr/bin/openssl genrsa 1024 > /etc/tsuru/tls/key.pem"
+  creates "/etc/tsuru/tls/key.pem"
+end
+
+#execute "generate tls cert file" do
+#  command "/usr/bin/openssl req -x509 -new -key /etc/tsuru/tls/key.pem >> /etc/tsuru/tls/cert.pem"
+#  creates "/etc/tsuru/tls/cert.pem"
+#end
 
 # create a virtualenv for abyss
 #execute "create-abyss-venv" do

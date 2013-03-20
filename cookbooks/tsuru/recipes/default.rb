@@ -173,14 +173,14 @@ end
 # One step non-interactive, self-signed, passwordless certificate creation :
 # openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=www.example.com" -keyout www.example.com.key  -out www.example.com.cert  
 execute "generate tls key file" do  
-  command "/usr/bin/openssl genrsa 4096 > /etc/tsuru/tls/tsuru.key.pem"
-  creates "/etc/tsuru/tls/tsuru.key.pem"
+  command "/usr/bin/openssl genrsa 4096 > /etc/tsuru/tsuru.key.pem"
+  creates "/etc/tsuru/tsuru.key.pem"
 end
 
 execute "generate tls cert file" do
-  command "/usr/bin/openssl req -new -days 365 -nodes -x509 -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=www.example.com" -out /etc/tsuru/tls/tsuru.cert.pem"
+  command '/usr/bin/openssl req -new -days 365 -nodes -x509 -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=www.example.com" -out /etc/tsuru/tsuru.cert.pem'
 #  command "/usr/bin/openssl req -x509 -new -key /etc/tsuru/tls/key.pem -out /etc/tsuru/tls/cert.pem -config /tmp/request.config"
-  creates "/etc/tsuru/tls/tsuru.cert.pem"
+  creates "/etc/tsuru/tsuru.cert.pem"
 end
 
 # create a virtualenv for abyss

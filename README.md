@@ -11,6 +11,7 @@ vagrant-tsuru
 Usage
 =====
   git submodule init && git submodule update
+  
   vagrant up 
 
 

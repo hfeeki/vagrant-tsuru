@@ -145,7 +145,7 @@ end
 execute "get_tsuru_code" do
   user  "vagrant"
   group "vagrant"
-  command "/home/vagrant/go/bin/go get github.com/globocom/tsuru/..."
+  command "/home/vagrant/go/bin/go get github.com/tsuru/tsuru/..."
   environment ({'GOROOT' => '/home/vagrant/go', 
                 'GOPATH' => '/home/vagrant/.go', 
                 'GOARCH' => 'amd64', 
@@ -259,11 +259,11 @@ bash "build-tsuru" do
   cwd "/home/git"  
   code <<-EOH
     mkdir -p dist
-    /home/vagrant/go/bin/go clean github.com/globocom/tsuru/...
-    /home/vagrant/go/bin/go build -a -o dist/collector github.com/globocom/tsuru/collector
-    /home/vagrant/go/bin/go build -a -o dist/webserver github.com/globocom/tsuru/api    
-    /home/vagrant/go/bin/go build -a -o dist/tsuru github.com/globocom/tsuru/cmd/tsuru/developer
-    /home/vagrant/go/bin/go build -a -o dist/crane github.com/globocom/tsuru/cmd/crane
+    /home/vagrant/go/bin/go clean github.com/tsuru/tsuru/...
+    /home/vagrant/go/bin/go build -a -o dist/collector github.com/tsuru/tsuru/collector
+    /home/vagrant/go/bin/go build -a -o dist/webserver github.com/tsuru/tsuru/api    
+    /home/vagrant/go/bin/go build -a -o dist/tsuru github.com/tsuru/tsuru/cmd/tsuru/developer
+    /home/vagrant/go/bin/go build -a -o dist/crane github.com/tsuru/tsuru/cmd/crane
   EOH
 end
 
